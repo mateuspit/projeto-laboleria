@@ -1,5 +1,28 @@
 import { db } from "../database/database.connection.js";
 
+export async function postTrueDeliveredStatus({ id }) {
+    try {
+        await db.query(`
+            UPDATE orders SET "isDelivered" = true WHERE id = $1
+        `, [id]);
+    }
+    catch (err) {
+        return res.status(500).send(err.message);
+    }
+}
+
+export async function getDeliveredStatus({ id }) {
+    try {
+        const isDelivered = await db.query(`
+            SELECT "isDelivered" FROM orders WHERE id=$1
+        `, [id]);
+        return isDelivered.rows[0].isDelivered;
+    }
+    catch (err) {
+        return res.status(500).send(err.message);
+    }
+}
+
 export async function getAllOrdersDataEdited({ date, id }) {
     try {
         let getData = ([]);
@@ -35,7 +58,7 @@ export async function getAllOrdersDataEdited({ date, id }) {
             `, [date])
         }
         else if (id) {
-            
+
             getData = await db.query(`SELECT
                 clients.id AS "client.id",
                 clients.name AS "client.name",
