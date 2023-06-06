@@ -1,10 +1,10 @@
 import { db } from "../database/database.connection.js";
 
-export async function getAllOrdersDataEdited( date ) {
+export async function getAllOrdersDataEdited(date) {
     try {
         let getData = ([]);
         //console.log(date);
-        //poderia trabalhar com string para montar a string e diminuir linha mas n vou fazer isso kkk
+        //poderia trabalhar com string para montar a query e diminuir linha mas n vou fazer isso kkk
         if (date) {
             getData = await db.query(`SELECT
                 clients.id AS "client.id",
@@ -20,7 +20,8 @@ export async function getAllOrdersDataEdited( date ) {
                 orders.id AS "orderId",
                 orders."createdAt" AS "createdAt",
                 orders.quantity AS "quantity",
-                orders."totalPrice" AS "totalPrice"
+                orders."totalPrice" AS "totalPrice",
+                orders."isDelivered" AS "isDelivered"
             FROM
                 orders
             INNER JOIN
@@ -48,7 +49,8 @@ export async function getAllOrdersDataEdited( date ) {
                 orders.id AS "orderId",
                 orders."createdAt" AS "createdAt",
                 orders.quantity AS "quantity",
-                orders."totalPrice" AS "totalPrice"
+                orders."totalPrice" AS "totalPrice",
+                orders."isDelivered" AS "isDelivered"
             FROM
                 orders
             INNER JOIN
@@ -102,7 +104,9 @@ export async function getAllOrdersDataEdited( date ) {
             orderId: gdr.orderId,
             createdAt: gdr.createdAt,
             quantity: gdr.quantity,
-            totalPrice: gdr.totalPrice
+            totalPrice: gdr.totalPrice,
+            isDelivered: gdr.isDelivered
+            //orders."isDelivered" AS "isDelivered"
         }));
 
         //console.log(transformedObjs);
