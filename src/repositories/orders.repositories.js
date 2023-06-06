@@ -1,6 +1,6 @@
 import { db } from "../database/database.connection.js";
 
-export async function getAllOrdersDataEdited(date) {
+export async function getAllOrdersDataEdited({ date, id }) {
     try {
         let getData = ([]);
         //console.log(date);
@@ -33,6 +33,36 @@ export async function getAllOrdersDataEdited(date) {
             WHERE
                 DATE_TRUNC('day', orders."createdAt") = TO_DATE($1, 'YYYY-DD-MM');
             `, [date])
+        }
+        else if (id) {
+            
+            getData = await db.query(`SELECT
+                clients.id AS "client.id",
+                clients.name AS "client.name",
+                clients.address AS "client.address",
+                clients.phone AS "client.phone",
+                cakes.id AS "cake.id",
+                cakes.name AS "cake.name",
+                cakes.price AS "cake.price",
+                cakes.description AS "cake.description",
+                cakes.image AS "cake.image",
+                flavours.name AS "cake.flavour",
+                orders.id AS "orderId",
+                orders."createdAt" AS "createdAt",
+                orders.quantity AS "quantity",
+                orders."totalPrice" AS "totalPrice",
+                orders."isDelivered" AS "isDelivered"
+            FROM
+                orders
+            INNER JOIN
+                clients ON orders."clientId" = clients.id
+            INNER JOIN
+                cakes ON orders."cakeId" = cakes.id
+            INNER JOIN
+                flavours ON cakes."flavourId" = flavours.id
+            WHERE
+                orders.id=$1
+            `, [id])
         }
         else {
             getData = await db.query(`SELECT
