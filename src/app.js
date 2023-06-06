@@ -1,7 +1,7 @@
 import cors from "cors";
-import express from "express";
+import express, { json } from "express";
 import dotenv from "dotenv";
-import apiPort from "./constants/apiPort";
+import apiPort from "./constants/apiPort.js";
 import router from "./routes/index.routes.js";
 
 dotenv.config()
