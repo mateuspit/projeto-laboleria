@@ -1,32 +1,64 @@
 import { db } from "../database/database.connection.js";
 
-export async function getAllOrdersDataEdited() {
+export async function getAllOrdersDataEdited( date ) {
     try {
-
-        const getData = await db.query(`SELECT
-            clients.id AS "client.id",
-            clients.name AS "client.name",
-            clients.address AS "client.address",
-            clients.phone AS "client.phone",
-            cakes.id AS "cake.id",
-            cakes.name AS "cake.name",
-            cakes.price AS "cake.price",
-            cakes.description AS "cake.description",
-            cakes.image AS "cake.image",
-            flavours.name AS "cake.flavour",
-            orders.id AS "orderId",
-            orders."createdAt" AS "createdAt",
-            orders.quantity AS "quantity",
-            orders."totalPrice" AS "totalPrice"
-        FROM
-            orders
-        INNER JOIN
-            clients ON orders."clientId" = clients.id
-        INNER JOIN
-            cakes ON orders."cakeId" = cakes.id
-        INNER JOIN
-            flavours ON cakes."flavourId" = flavours.id;
-        `)
+        let getData = ([]);
+        //console.log(date);
+        //poderia trabalhar com string para montar a string e diminuir linha mas n vou fazer isso kkk
+        if (date) {
+            getData = await db.query(`SELECT
+                clients.id AS "client.id",
+                clients.name AS "client.name",
+                clients.address AS "client.address",
+                clients.phone AS "client.phone",
+                cakes.id AS "cake.id",
+                cakes.name AS "cake.name",
+                cakes.price AS "cake.price",
+                cakes.description AS "cake.description",
+                cakes.image AS "cake.image",
+                flavours.name AS "cake.flavour",
+                orders.id AS "orderId",
+                orders."createdAt" AS "createdAt",
+                orders.quantity AS "quantity",
+                orders."totalPrice" AS "totalPrice"
+            FROM
+                orders
+            INNER JOIN
+                clients ON orders."clientId" = clients.id
+            INNER JOIN
+                cakes ON orders."cakeId" = cakes.id
+            INNER JOIN
+                flavours ON cakes."flavourId" = flavours.id
+            WHERE
+                DATE_TRUNC('day', orders."createdAt") = TO_DATE($1, 'YYYY-DD-MM');
+            `, [date])
+        }
+        else {
+            getData = await db.query(`SELECT
+                clients.id AS "client.id",
+                clients.name AS "client.name",
+                clients.address AS "client.address",
+                clients.phone AS "client.phone",
+                cakes.id AS "cake.id",
+                cakes.name AS "cake.name",
+                cakes.price AS "cake.price",
+                cakes.description AS "cake.description",
+                cakes.image AS "cake.image",
+                flavours.name AS "cake.flavour",
+                orders.id AS "orderId",
+                orders."createdAt" AS "createdAt",
+                orders.quantity AS "quantity",
+                orders."totalPrice" AS "totalPrice"
+            FROM
+                orders
+            INNER JOIN
+                clients ON orders."clientId" = clients.id
+            INNER JOIN
+                cakes ON orders."cakeId" = cakes.id
+            INNER JOIN
+                flavours ON cakes."flavourId" = flavours.id;
+            `)
+        }
 
         //console.log(getData.rows);
 

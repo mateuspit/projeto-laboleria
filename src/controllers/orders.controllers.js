@@ -2,8 +2,9 @@ import { postOrdersDB, getAllOrdersDataEdited } from "../repositories/orders.rep
 
 export async function getOrdersController(req, res) {
     try {
-        const allOrdersDataEdited = await getAllOrdersDataEdited();
+        const allOrdersDataEdited = await getAllOrdersDataEdited(req.query.date);
         //console.log(allOrdersDataEdited);
+        if (!allOrdersDataEdited.length) return res.status(404).send(allOrdersDataEdited)
         return res.status(200).send(allOrdersDataEdited);
     }
     catch (err) {
