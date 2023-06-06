@@ -1,5 +1,21 @@
 import { db } from "../database/database.connection.js";
 
+export async function getAllClientOrdersDB({ id }) {
+    try {
+        const clientOrdersData = await db.query(`
+            SELECT orders.id AS "orderId", orders.quantity, orders."createdAt", orders."totalPrice", cakes.name AS "cakeName"
+            FROM orders
+            INNER JOIN clients ON orders."clientId" = clients.id
+            INNER JOIN cakes ON orders."cakeId" = cakes.id
+            WHERE clients.id = $1;
+        `, [id]);
+        return clientOrdersData.rows;
+    }
+    catch (err) {
+        return res.status(500).res(err.message);
+    }
+}
+
 export async function getClientDB({ phone, clientId }) {
     try {
         let clientData = ([]);
