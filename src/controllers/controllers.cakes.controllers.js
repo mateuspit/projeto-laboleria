@@ -1,4 +1,15 @@
-import { postCakesDB } from "../repositories/cakes.repositories.js";
+import { postCakesDB, postFlavoursDB } from "../repositories/cakes.repositories.js";
+
+export async function postFlavoursController(req, res) {
+    //const { name, price, description, image, flavourId } = req.body;
+    try {
+        await postFlavoursDB(req.body);
+        return res.sendStatus(201);
+    }
+    catch (err) {
+        return res.status(500).send(err.message);
+    }
+}
 
 export async function postCakesController(req, res) {
     //const { name, price, description, image, flavourId } = req.body;

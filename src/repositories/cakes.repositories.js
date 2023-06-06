@@ -1,5 +1,19 @@
 import { db } from "../database/database.connection.js";
 
+export async function postFlavoursDB({ name }) {
+    try {
+        db.query(`
+            INSERT INTO flavours (name) VALUES ($1);
+        `, [name]);
+        //db.query(`
+        //    INSERT INTO flavours (name) VALUES $1;
+        //`, [name]);
+    }
+    catch (err) {
+        return res.status(500).send(err.message);
+    }
+}
+
 export async function postCakesDB({ name, price, description, image, flavourId }) {
     try {
         db.query(`INSERT INTO cakes (name, price, image, description, "flavourId")
@@ -13,17 +27,12 @@ export async function postCakesDB({ name, price, description, image, flavourId }
 export async function getCakeNameDB({ cakeId, name }) {
     try {
         let cakeData = ([]);
-        //console.log("cakeId", cakeId);
-        //console.log("cakeId", !!cakeId);
-        //console.log("name", name);
-        //console.log("name", !!name);
         if (name) {
             cakeData = await db.query(`SELECT * FROM cakes WHERE name=$1`, [name]);
         }
         else if (cakeId) {
             cakeData = await db.query(`SELECT * FROM cakes WHERE id=$1`, [cakeId]);
         }
-        //console.log(cakeData.rows);
         return cakeData.rows;
     }
     catch (err) {
@@ -31,12 +40,15 @@ export async function getCakeNameDB({ cakeId, name }) {
     }
 }
 
-export async function getFlavourDB(flavourName) {
+export async function getFlavourDB({ flavourId, name }) {
     try {
-        //console.log("getFlavourDB");
-        const result = await db.query(`SELECT name FROM flavours WHERE id=$1`, [flavourName]);
-        //SELECT id FROM flavours WHERE id=1
-        //console.log("result.rows", result.rows);
+        let result = ([]);
+        if (flavourId) {
+            result = await db.query(`SELECT name FROM flavours WHERE id=$1`, [flavourId]);
+        }
+        else if (name) {
+            result = await db.query(`SELECT name FROM flavours WHERE name=$1`, [name]);
+        }
         return result.rows;
     } catch (err) {
         throw err;
