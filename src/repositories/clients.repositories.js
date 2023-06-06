@@ -1,8 +1,17 @@
 import { db } from "../database/database.connection.js";
 
-export async function getClientDB(phone) {
+export async function getClientDB({ phone, clientId }) {
     try {
-        const clientData = await db.query(`SELECT * FROM clients WHERE phone=$1`, [phone]);
+        let clientData = ([]);
+        //console.log("phone", phone);
+        //console.log("clientId", clientId);
+        if (phone) {
+            clientData = await db.query(`SELECT * FROM clients WHERE phone=$1`, [phone]);
+        }
+        else if (clientId) {
+            clientData = await db.query(`SELECT * FROM clients WHERE id=$1`, [clientId]);
+        }
+        //console.log(clientData.rows);
         return clientData.rows;
     }
     catch (err) {

@@ -12,7 +12,7 @@ export default function validateCakeInfo(schema) {
             //const cakeExists = await db.query(`SELECT name FROM cakes WHERE name=$1`, [req.body.name]);
             const flavourExists = await getFlavourDB(req.body.flavourId)
             if (!flavourExists.length) return res.status(404).send("Sabor não existe!");
-            const cakeExists = await getCakeNameDB(req.body.name);
+            const cakeExists = await getCakeNameDB(req.body);
             if (cakeExists.length) return res.status(409).send("Bolo já existente");
         }
         catch (err) {

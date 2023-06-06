@@ -10,10 +10,21 @@ export async function postCakesDB({ name, price, description, image, flavourId }
     }
 }
 
-export async function getCakeNameDB(cakeName) {
+export async function getCakeNameDB({ cakeId, name }) {
     try {
-        const result = await db.query(`SELECT name FROM cakes WHERE name=$1`, [cakeName]);
-        return result.rows;
+        let cakeData = ([]);
+        //console.log("cakeId", cakeId);
+        //console.log("cakeId", !!cakeId);
+        //console.log("name", name);
+        //console.log("name", !!name);
+        if (name) {
+            cakeData = await db.query(`SELECT * FROM cakes WHERE name=$1`, [name]);
+        }
+        else if (cakeId) {
+            cakeData = await db.query(`SELECT * FROM cakes WHERE id=$1`, [cakeId]);
+        }
+        //console.log(cakeData.rows);
+        return cakeData.rows;
     }
     catch (err) {
         return res.status(500).send(err.message);
