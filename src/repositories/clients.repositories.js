@@ -3,7 +3,7 @@ import { db } from "../database/database.connection.js";
 export async function getAllClientOrdersDB({ id }) {
     try {
         const clientOrdersData = await db.query(`
-            SELECT orders.id AS "orderId", orders.quantity, orders."createdAt", orders."totalPrice", cakes.name AS "cakeName"
+            SELECT orders.id AS "orderId", orders.quantity, orders."createdAt", orders."totalPrice", cakes.name AS "cakeName", orders."isDelivered"
             FROM orders
             INNER JOIN clients ON orders."clientId" = clients.id
             INNER JOIN cakes ON orders."cakeId" = cakes.id
