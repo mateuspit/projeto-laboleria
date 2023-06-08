@@ -155,7 +155,7 @@ export async function getAllOrdersDataEdited({ date, id }) {
                 flavour: gdr['cake.flavour']
             },
             orderId: gdr.orderId,
-            createdAt: gdr.createdAt,
+            createdAt: new Date(gdr.createdAt).toISOString().slice(0, 16).replace("T", " "),
             quantity: gdr.quantity,
             totalPrice: gdr.totalPrice,
             isDelivered: gdr.isDelivered
