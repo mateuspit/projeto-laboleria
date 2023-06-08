@@ -20,7 +20,7 @@ export async function getClientDB({ phone, clientId }) {
     try {
         let clientData = ([]);
         //console.log("phone", phone);
-        //console.log("clientId", clientId);
+        console.log("clientId", clientId);
         if (phone) {
             clientData = await db.query(`SELECT * FROM clients WHERE phone=$1`, [phone]);
         }

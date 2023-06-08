@@ -8,9 +8,9 @@ export default function validateOrderInfo(schema) {
         if (errorMessages) return res.status(400).send(errorMessages);
         try {
             const clientData = await getClientDB(req.body);
-            if (!clientData) return res.status(404).send("Cliente não existe!");
+            if (!clientData.length) return res.status(404).send("Cliente não existe!");
             const cakeData = await getCakeNameDB(req.body);
-            if (!cakeData) return res.status(404).send("Bolo não existe!");
+            if (!cakeData.length) return res.status(404).send("Bolo não existe!");
         }
         catch (err) {
             return res.status(500).send(err.message);
